@@ -1,9 +1,6 @@
 class AgifyResult {
   final int age;
+  final String name;
 
-  const AgifyResult(this.age);
-
-  factory AgifyResult.fromJSON(Map<String, dynamic> jsonObject) {
-    return AgifyResult(jsonObject['age']);
-  }
+  const AgifyResult(this.age, this.name);
 }
