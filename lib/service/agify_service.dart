@@ -18,6 +18,6 @@ class AgifyApiService {
         scheme: 'https',
         host: 'api.agify.io',
         path: '/',
-        queryParameters: {'name': name});
+        queryParameters: {'name': name, 'country_id': 'DE'});
   }
 }
