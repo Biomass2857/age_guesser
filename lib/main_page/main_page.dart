@@ -1,3 +1,4 @@
+import 'package:age_guesser/service/agify_service.dart';
 import 'package:flutter/material.dart';
 
 class MainPageWidget extends StatefulWidget {
@@ -9,6 +10,7 @@ class MainPageWidget extends StatefulWidget {
 
 class _MainPageWidgetState extends State<MainPageWidget> {
   String? _resultString;
+  String currentName = '';
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           TextField(
             decoration: InputDecoration(
                 border: OutlineInputBorder(), labelText: 'Vorname'),
-            onChanged: (value) => print("input $value"),
+            onChanged: (value) => {currentName = value},
             onSubmitted: (value) {
               print("input submitted $value");
             },
@@ -27,13 +29,16 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           TextButton(
               onPressed: () {
                 print("submit");
-                setState(() {
-                  _resultString = "dein name ";
+                AgifyApiService().getAgeForName(currentName).then((ageResult) {
+                  setState(() {
+                    _resultString =
+                        'dein Alter wird aufgrund deines Namens auf ${ageResult.age} geschätzt';
+                  });
                 });
               },
-              child: Text('Alter herausfinden')),
+              child: const Text('Alter herausfinden')),
           AnimatedSwitcher(
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
             child:
                 _resultString == null ? Container() : Text(_resultString ?? ""),
           )
