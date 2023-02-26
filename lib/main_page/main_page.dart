@@ -54,6 +54,23 @@ class _MainPageWidgetState extends State<MainPageWidget> {
                 },
                 stream: bloc.resultStream,
                 initialData: null,
+              )),
+          AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: StreamBuilder(
+                builder: (context, snapshot) {
+                  var text = snapshot.data;
+                  if (text != null) {
+                    return Text(
+                      text,
+                      style: const TextStyle(color: Colors.red),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+                stream: bloc.errorStream,
+                initialData: null,
               ))
         ],
       ),

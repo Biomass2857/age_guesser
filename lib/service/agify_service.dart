@@ -21,28 +21,28 @@ class AgifyApiService {
       }
 
       if (response.statusCode == 429) {
-        throw Exception(AgifyApiError.tooManyRequests);
+        throw AgifyApiError.tooManyRequests;
       }
 
-      throw Exception(AgifyApiError.unknownError);
+      throw AgifyApiError.unknownError;
     });
   }
 
   int _mapResponse(dynamic jsonResponse) {
     if (jsonResponse == null) {
-      throw Exception(AgifyApiError.unknownError);
+      throw AgifyApiError.unknownError;
     }
 
-    if (jsonResponse['count'] != null) {
-      throw Exception(AgifyApiError.unknownError);
+    if (jsonResponse['count'] == null) {
+      throw AgifyApiError.unknownError;
     }
 
     if (jsonResponse['count'] == 0) {
-      throw Exception(AgifyApiError.nameNotInDatabase);
+      throw AgifyApiError.nameNotInDatabase;
     }
 
     if (jsonResponse['age'] == null) {
-      throw Exception(AgifyApiError.unknownError);
+      throw AgifyApiError.unknownError;
     }
 
     return jsonResponse['age'];
