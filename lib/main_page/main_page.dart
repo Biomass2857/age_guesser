@@ -41,13 +41,16 @@ class _MainPageWidgetState extends State<MainPageWidget> {
                     bloc.formSubmitted(currentName);
                   },
                   child: const Text('Alter herausfinden')),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: StreamBuilder(
-                  builder: (context, snapshot) => snapshot.data == true
-                      ? const CircularProgressIndicator()
-                      : Container(),
-                  stream: bloc.loadingStream,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: StreamBuilder(
+                    builder: (context, snapshot) => snapshot.data == true
+                        ? const CircularProgressIndicator()
+                        : Container(),
+                    stream: bloc.loadingStream,
+                  ),
                 ),
               )
             ],
@@ -58,7 +61,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
                 builder: (context, snapshot) {
                   var text = snapshot.data;
                   if (text != null) {
-                    return Text(text);
+                    return Text(
+                      text,
+                      style: const TextStyle(fontSize: 20),
+                    );
                   } else {
                     return Container();
                   }
@@ -74,7 +80,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
                   if (text != null) {
                     return Text(
                       text,
-                      style: const TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red, fontSize: 20),
                     );
                   } else {
                     return Container();
