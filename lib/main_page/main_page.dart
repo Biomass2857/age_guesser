@@ -9,9 +9,7 @@ class MainPageWidget extends StatefulWidget {
 }
 
 class _MainPageWidgetState extends State<MainPageWidget> {
-  String currentName = '';
   final MainPageBloc bloc = MainPageBloc();
-
   final editingController = TextEditingController();
 
   @override
@@ -31,14 +29,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           TextField(
             decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: 'Vorname'),
-            onChanged: (nextValue) => currentName = nextValue,
             controller: editingController,
           ),
           Row(
             children: [
               TextButton(
                   onPressed: () {
-                    bloc.formSubmitted(currentName);
+                    bloc.formSubmitted(editingController.text);
                   },
                   child: const Text('Alter herausfinden')),
               Padding(
