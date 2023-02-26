@@ -1,4 +1,4 @@
-import 'package:age_guesser/service/agify_service.dart';
+import 'package:age_guesser/main_page/main_page_bloc.dart';
 import 'package:flutter/material.dart';
 
 class MainPageWidget extends StatefulWidget {
@@ -9,8 +9,8 @@ class MainPageWidget extends StatefulWidget {
 }
 
 class _MainPageWidgetState extends State<MainPageWidget> {
-  String? _resultString;
   String currentName = '';
+  MainPageBloc bloc = MainPageBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +23,38 @@ class _MainPageWidgetState extends State<MainPageWidget> {
                 border: OutlineInputBorder(), labelText: 'Vorname'),
             onChanged: (value) => currentName = value,
           ),
-          TextButton(
-              onPressed: () {
-                AgifyApiService().getAgeForName(currentName).then((ageResult) {
-                  setState(() {
-                    _resultString =
-                        'dein Alter wird aufgrund deines Namens auf ${ageResult.age} geschätzt';
-                  });
-                });
-              },
-              child: const Text('Alter herausfinden')),
+          Row(
+            children: [
+              TextButton(
+                  onPressed: () {
+                    bloc.formSubmitted(currentName);
+                  },
+                  child: const Text('Alter herausfinden')),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: StreamBuilder(
+                  builder: (context, snapshot) => snapshot.data == true
+                      ? const CircularProgressIndicator()
+                      : Container(),
+                  stream: bloc.loadingStream,
+                ),
+              )
+            ],
+          ),
           AnimatedSwitcher(
-            duration: const Duration(seconds: 2),
-            child:
-                _resultString == null ? Container() : Text(_resultString ?? ""),
-          )
+              duration: const Duration(milliseconds: 200),
+              child: StreamBuilder(
+                builder: (context, snapshot) {
+                  var text = snapshot.data;
+                  if (text != null) {
+                    return Text(text);
+                  } else {
+                    return Container();
+                  }
+                },
+                stream: bloc.resultStream,
+                initialData: null,
+              ))
         ],
       ),
     );
