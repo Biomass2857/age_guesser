@@ -9,10 +9,13 @@ class MainPageBloc {
 
   Stream<String?> get resultStream => _resultStreamController.stream;
   Stream<bool> get loadingStream => _showsLoadingIndicator.stream;
+  Stream<String> get textFieldValueModifyStream =>
+      _textFieldValueModifyStreamController.stream;
   Stream<String?> get errorStream => _errorStreamController.stream;
 
   final _resultStreamController = StreamController<String?>();
   final _nameInputStreamController = StreamController<String>();
+  final _textFieldValueModifyStreamController = StreamController<String>();
   final _errorStreamController = StreamController<String?>();
   final _showsLoadingIndicator = StreamController<bool>();
 
@@ -25,6 +28,10 @@ class MainPageBloc {
     });
   }
 
+  void _clearText() {
+    _textFieldValueModifyStreamController.sink.add("");
+  }
+
   void _resetOutput() {
     _errorStreamController.sink.add(null);
     _resultStreamController.sink.add(null);
@@ -33,12 +40,12 @@ class MainPageBloc {
   Future<void> _executeAgifyRequest(String name) {
     return AgifyApiService().getAgeForName(name).then((ageResult) {
       _resultStreamController.sink.add(
-          'dein Alter wird aufgrund deines Namens auf ${ageResult.age} Jahre geschätzt');
+          '${ageResult.name}: dein Alter wird auf ${ageResult.age} Jahre geschätzt.');
     }).catchError((error) {
       _handleAgifyApiError(error);
     }, test: (error) => error is AgifyApiError).catchError((unknownError) {
       _handleUnkownError();
-    });
+    }).whenComplete(() => _clearText());
   }
 
   void _handleAgifyApiError(AgifyApiError error) {

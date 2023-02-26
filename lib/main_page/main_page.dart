@@ -10,7 +10,17 @@ class MainPageWidget extends StatefulWidget {
 
 class _MainPageWidgetState extends State<MainPageWidget> {
   String currentName = '';
-  MainPageBloc bloc = MainPageBloc();
+  final MainPageBloc bloc = MainPageBloc();
+
+  final editingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    bloc.textFieldValueModifyStream.listen((newContent) {
+      editingController.text = newContent;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +31,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           TextField(
             decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: 'Vorname'),
-            onChanged: (value) => currentName = value,
+            onChanged: (nextValue) => currentName = nextValue,
+            controller: editingController,
           ),
           Row(
             children: [
