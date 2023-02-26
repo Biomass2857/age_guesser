@@ -19,16 +19,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       child: Column(
         children: [
           TextField(
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 border: OutlineInputBorder(), labelText: 'Vorname'),
-            onChanged: (value) => {currentName = value},
-            onSubmitted: (value) {
-              print("input submitted $value");
-            },
+            onChanged: (value) => currentName = value,
           ),
           TextButton(
               onPressed: () {
-                print("submit");
                 AgifyApiService().getAgeForName(currentName).then((ageResult) {
                   setState(() {
                     _resultString =
